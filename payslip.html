@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+ 
+    <title>Pay Slip Generation</title>
+	<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+  <form name="employeeInfoForm" action="" onsubmit="return generatePayslip(this['name'].value, this['lastname'].value, this['salary'].value,this['superrate'].value);" method="post">
+	 <fieldset>		
+		<label for="name">First Name</label>
+		<input type="text" class="form-control" id="name">
+		<br />
+		<label for="lastname">Lastname</label>
+		<input type="text" id="lastname" class="form-control" name="lastname" placeholder="Enter your last name" />
+		<br />
+		<label for="salary">Annual salary</label>
+		<input type="text" id="salary" class="form-control" name="salary" placeholder="Enter your salary" />
+		<br />
+		<label for="superrate">Super rate</label>
+		<input type="text" id="superrate" class="form-control" name="superrate" placeholder="Enter your superrate" />
+		<br />
+		
+		<button type="submit" class="btn btn-primary">Generate Payslip</button>
+	 </fieldset>
+  </form>
+  
+  
+  
+  <form name="payForm" action="" onsubmit="" method="post">
+		<input type="hidden" id="nameValue" name="name"  />
+		<input type="hidden" id="lastnameValue" name="lastname"  />
+		<input type="hidden" id="annualValue" name="annual"  />
+		<input type="hidden" id="grossValue"  name="gross" />
+		<input type="hidden" id="taxValue" name="tax" />
+		<input type="hidden" id="netValue"  name="net"/>
+		<input type="hidden" id="superValue" name="super" />
+		<input type="hidden" id="payValue"  name="pay"/>
+		<table class="table table-striped">
+			<tbody>
+			  <tr>
+				<td>Pay Date</td>
+				<td>31 December 2016</td>
+			  </tr>
+			  <tr>
+				<td>Pay Frequency</td>
+				<td>Monthly</td>
+			  </tr>		
+			 <tr>
+				<td>Annual income</td>
+				<td id="annual" ></td>
+			  </tr>		
+			  <tr>
+				<td>Gross income</td>
+				<td id="gross" ></td>
+			  </tr>		
+			  <tr>
+				<td>Income Tax</td>
+				<td id="tax" ></td>
+			  </tr>		
+			  <tr>
+				<td>Net income</td>
+				<td id="net" ></td>
+			  </tr>		
+			  <tr>
+				<td>Super</td>
+				<td id="super" ></td>
+			  </tr>		
+			  <tr>
+				<td>Pay</td>
+				<td id="pay"></td>
+			  </tr>			
+			</tbody>
+		</table>
+		
+		<br>
+      <button type="submit" class="btn btn-primary">Pay</button>
+  </form>
+  
+  
+  
+  
+    <script>
+	
+	function round(number){
+		if (number%1 >= 50) 
+			return Math.ceil(number);
+		else
+			return Math.floor(number);
+	}
+	
+	function calculateIncomeTax(salary){
+		if (salary<=18200) return 0;
+		if (salary>18200 && salary <=37000) return round(((salary-18200) * 0.19)/12);
+		if (salary>37000 && salary <=80000) return round((3572 + ((salary-37000)* 0.325))/12);
+		if (salary>80000 && salary <=180000) return round((17547 + ((salary-80000) * 0.37))/12);
+		if (salary>180000) return round((54547 + ((salary-180000) * 0.45))/12);
+	}
+	
+    function generatePayslip(name, lastname, salary, superrate){
+	  document.querySelector("#nameValue").value = name;
+	  document.querySelector("#lastnameValue").value = lastname;
+	  document.querySelector("#annual").textContent = Number(salary);
+	  document.querySelector("#annualValue").value = Number(salary);
+	  gross = round(Number(salary) / 12);
+	  document.querySelector("#gross").textContent = gross;
+	  document.querySelector("#grossValue").value = gross;
+	  tax = calculateIncomeTax(Number(salary));
+	  document.querySelector("#tax").textContent = tax;
+	  document.querySelector("#taxValue").value = tax;
+	  net = gross - tax;
+	  document.querySelector("#net").textContent = net;
+	  document.querySelector("#netValue").value = net;
+	  superAmount = round(gross * superrate/100);
+	  document.querySelector("#super").textContent = superAmount;
+	  document.querySelector("#superValue").value = superAmount;
+  	  document.querySelector("#pay").textContent = net - superAmount;
+  	  document.querySelector("#payValue").value = net - superAmount;
+
+      return false;
+    }
+	
+	
+	
+	
+    </script>
+	
+	
+</body>
+</html>
